@@ -1,9 +1,6 @@
 //exemplo base
 //referência: https://raw.githubusercontent.com/vinicius0082/esp32-tagoIO/main/exemplos/mpu_esp32_mqtt_tagoIO
 
-
-//Envio de Dados para tagoIO via MQTT
-
 #include <ArduinoJson.h>
 #include "EspMQTTClient.h"
 
@@ -26,7 +23,6 @@ int valor_lado1;
 int valor_lado2;
 int valor_lado3;
 
-
 //configurações da conexão MQTT
 EspMQTTClient client
 (
@@ -43,19 +39,19 @@ EspMQTTClient client
 void setup()
 {
   Serial.begin(115200);
-  //configurações dos pinos
-  pinMode(pino_botao, INPUT); //configura o pino como entrada
-  pinMode(pino_lado1, INPUT); //configura o pino como entrada
-  pinMode(pino_lado2, INPUT); //configura o pino como entrada
-  pinMode(pino_lado3, INPUT); //configura o pino como entrada
-  pinMode(pino_led, OUTPUT); //configura o pino como entrada
-  digitalWrite(pino_botao, HIGH); //ativa pull-up no pino de entrada
-  digitalWrite(pino_lado1, HIGH); //ativa pull-up no pino de entrada
-  digitalWrite(pino_lado2, HIGH); //ativa pull-up no pino de entrada
-  digitalWrite(pino_lado3, HIGH); //ativa pull-up no pino de entrada
+  //configura os pinos como entrada
+  pinMode(pino_botao, INPUT); 
+  pinMode(pino_lado1, INPUT); 
+  pinMode(pino_lado2, INPUT); 
+  pinMode(pino_lado3, INPUT); 
+  pinMode(pino_led, OUTPUT);
+
+  //ativa pull-up no pino de entrada
+  digitalWrite(pino_botao, HIGH); 
+  digitalWrite(pino_lado1, HIGH); 
+  digitalWrite(pino_lado2, HIGH); 
+  digitalWrite(pino_lado3, HIGH); 
 }
-
-
 
 void leitura_sinais()
 {
@@ -90,16 +86,14 @@ void converte_json()
   sjson_lado3["variable"] = "lado3";
   sjson_lado3["value"] = valor_lado3;
   serializeJson(sjson_lado3, json_lado3);
-
-
 }
 
 void envia_msg()
-{
-  client.publish("node/btn", json_btn); // You can activate the retain flag by setting the third parameter to true
-  client.publish("node/btn", json_lado1); // You can activate the retain flag by setting the third parameter to true
-  client.publish("node/lado2e3", json_lado2); // You can activate the retain flag by setting the third parameter to true
-  client.publish("node/lado2e3", json_lado3); // You can activate the retain flag by setting the third parameter to true
+{ // Você pode ativar a sinalização de retenção definindo o terceiro parâmetro como true
+  client.publish("node/btn", json_btn); 
+  client.publish("node/btn", json_lado1); 
+  client.publish("node/lado2e3", json_lado2); 
+  client.publish("node/lado2e3", json_lado3); 
 }
 
 //loop do programa
@@ -136,11 +130,10 @@ void processa_msg(const String payload)
     else
       digitalWrite(pino_led, HIGH);
   }
-
 }
 
-// This function is called once everything is connected (Wifi and MQTT)
-// WARNING : YOU MUST IMPLEMENT IT IF YOU USE EspMQTTClient
+// Esta função é chamada uma vez que tudo está conectado (Wifi e MQTT)
+// ATENÇÃO: VOCÊ DEVE IMPLEMENTÁ-LA SE ESTIVER USANDO EspMQTTClient
 void onConnectionEstablished()
 {
    client.subscribe("node/status", [] (const String &payload)  {
